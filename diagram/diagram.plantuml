@@ -1,0 +1,56 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class CircleShape {
+  + CircleShape(int, iMediator, int): 
+  + receiveMessage(int): void
+  + sendMessageReverse(): void
+  + sendMessage(): void
+  - blink(): void
+  + draw(int, int, Pane): void
+}
+class Client {
+  + Client(): 
+  + threadSleepMs(int): void
+  + main(String[]): void
+  + start(Stage): void
+}
+class ConcreteMediator {
+  + ConcreteMediator(): 
+  + sendMessage(int, iShape, int): void
+  + addShape(iShape): void
+  + removeShape(iShape): void
+}
+class SquareShape {
+  + SquareShape(int, iMediator, int): 
+  + receiveMessage(int): void
+  + sendMessage(): void
+  + sendMessageReverse(): void
+  + draw(int, int, Pane): void
+  - blink(): void
+}
+interface iMediator << interface >> {
+  + removeShape(iShape): void
+  + addShape(iShape): void
+  + sendMessage(int, iShape, int): void
+}
+interface iShape << interface >> {
+  + sendMessageReverse(): void
+  + draw(int, int, Pane): void
+  + sendMessage(): void
+  + receiveMessage(int): void
+}
+
+CircleShape      "1" *-[#595959,plain]-> "mediator\n1" iMediator        
+CircleShape       -[#008200,dashed]-^  iShape           
+Client            -[#595959,dashed]->  CircleShape      : "«create»"
+Client            -[#595959,dashed]->  ConcreteMediator : "«create»"
+Client            -[#595959,dashed]->  SquareShape      : "«create»"
+ConcreteMediator  -[#008200,dashed]-^  iMediator        
+ConcreteMediator "1" *-[#595959,plain]-> "shapes\n*" iShape           
+SquareShape      "1" *-[#595959,plain]-> "mediator\n1" iMediator        
+SquareShape       -[#008200,dashed]-^  iShape           
+@enduml
